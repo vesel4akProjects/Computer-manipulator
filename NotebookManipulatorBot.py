@@ -1,3 +1,4 @@
+#import
 import telebot
 from telebot import types
 import os
@@ -10,26 +11,32 @@ import ctypes
 bot =telebot.TeleBot("TOKEN")
 my_screenshot =open("screenshot.png", encoding="utf-8")
 
+#crate main function for command "start"
+
 @bot.message_handler(commands=["start"])
 def main(message):
     if message.from_user.first_name != "Vesel4ak":
-        bot.send_message(message.chat.id,f"Добро пожаловать, {message.from_user.first_name}.Чтобы увидеть мои команды,пропишите команду /show")
+        bot.send_message(message.chat.id,f"Welcome, {message.from_user.first_name}.To see my commands, write the command /show")
         return
+
+#crate main function for command "show"
+
 @bot.message_handler(commands=["show"])
 def show(message):
     markup = types.ReplyKeyboardMarkup()
+    
 
-    button_1 = types.KeyboardButton("Завершение работы")
-    button_2 = types.KeyboardButton("Перезагрузка")
-    button_3 = types.KeyboardButton("Блокировка компьютера")
-
-    button_4 = types.KeyboardButton("Снимок экрана")
-    button_5 = types.KeyboardButton("Системная информация")
-    button_6 = types.KeyboardButton("Открыть командную строку")
-
-    button_7 = types.KeyboardButton("Свернуть все окна")
-    button_8 = types.KeyboardButton("Закрыть текущую вкладку")
-    button_9 = types.KeyboardButton("Открыть быстрые настройки")
+    button_1 = types.KeyboardButton("Shutdown")
+    button_2 = types.KeyboardButton("Reboot")
+    button_3 = types.KeyboardButton("Computer lock")
+    
+    button_4 = types.KeyboardButton("Screenshot")
+    button_5 = types.KeyboardButton("System Information")
+    button_6 = types.KeyboardButton("Open Command Prompt")
+    
+    button_7 = types.KeyboardButton("Minimize all windows")
+    button_8 = types.KeyboardButton("Close current tab")
+    button_9 = types.KeyboardButton("Open Quick Settings")
 
 
     markup.row(button_1, button_2, button_3)  # 1 ряд
@@ -40,57 +47,31 @@ def show(message):
     bot.send_message(message.chat.id, "Показзываю все мои команды:",reply_markup=markup)
     return
 
+#crate main function for events
 
 @bot.message_handler()
 def on_click(message):
-    if message.text == "Завершение работы":
+    if message.text == "Shutdown":
         os.system("shutdown /s /t 1")
-        bot.send_message(message.chat.id, "Устройство выключено")
+        bot.send_message(message.chat.id , "Device is off")
         return
-    elif message.text == "Перезагрузка":
-        os.system("shutdown /r /t 1")
-        bot.send_message(message.chat.id, "Перезагрузка уже началась")
+    elif message.text == "Reboot":
+        os.system("shutdown/r/t 1")
+        bot.send_message(message.chat.id , "Reboot has already started")
         return
-    elif message.text == "Блокировка компьютера":
+    elif message.text == "Computer lock":
         ctypes.windll.user32.LockWorkStation()
-        bot.send_message(message.chat.id,"Компьютер заблокирован!")
+        bot.send_message(message.chat.id ,"Computer is locked!")
         return
-
-
-    elif message.text == "Снимок экрана":
+    
+    
+    elif message.text == "Screenshot":
         my_screenshot = pyautogui.screenshot("screenshot.png")
-        bot.send_photo(message.chat.id, my_screenshot)
-        bot.send_message(message.chat.id,"Вот снимок экрана,только что сделаный на устройстве")
-    elif message.text == "Системная информация":
-        bot.send_message(message.chat.id, "Информация о твоём компьютере следующая:\n"
-                                          f"\nИмя компьютера: {socket.gethostname()}"
-                                          f"\nИмя пользователя: {socket.getfqdn()}"
-                                          f"\nВаша опперационная система: {platform.system()}"
-                                          f"\nВерсия вашей операционной системы: {platform.version()}"
-                                          f"\nАрхитектура вашей системы: {platform.architecture()[0]}"
-                                          f"\nВаш процессор: {platform.processor()}"
-                                          f"\nПлатформа: {platform.platform()}"
-                                          f"\nНомер и дата сборки: {platform.python_build()}"
-                                          f"\nВаш компилятор: {platform.python_compiler()}")
-        return
-    elif message.text == "Открыть командную строку":
-        pyautogui.hotkey("winleft", "r")
-        pyautogui.typewrite("cmd")
-        bot.send_message(message.chat.id, "Командная строка открыта!")
-        return
+        bot.send_photo(message.chat.id , my_screenshot)
+        bot.send_message(message.chat.id "Here is a screenshot just taken on the device")
+    elif message.text == "System information":
+        bot.send_message(message.chat.id "The information about your computer is as follows:\n"
+         f"\Computer name: {socket.gethostname()}"
 
 
-    elif message.text == "Свернуть все окна":
-        pyautogui.hotkey("winleft", "m")
-        bot.send_message(message.chat.id, "Все окна свернуты!")
-        return
-    elif message.text == "Закрыть текущую вкладку":
-        pyautogui.hotkey("alt","f4")
-        bot.send_message(message.chat.id, "Текущая вкладка закрыта")
-        return
-    elif message.text == "Открыть быстрые настройки":
-        pyautogui.hotkey("winleft","a")
-        bot.send_message(message.chat.id, "Текущая вкладка закрыта")
-        return
-
-bot.infinity_polling()
+bot.infunity_polling()
